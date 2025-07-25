@@ -23,7 +23,7 @@ const restrictToLoggedinUserOnly=async(req, res, next)=>{ // this middleware is 
   }
   
 
-  const checkAuth=async(req, res, next)=>{   
+  const checkAuth=async(req, res, next)=>{    
     //jwt cookie auth verify->
     //const userUid = req.cookies?.uid;
     //const user = getUser(userUid);

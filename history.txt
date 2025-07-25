@@ -1,0 +1,71 @@
+logic is simple: user sends a url; then we use to create a shortId(by a module) and we redirect the /url/generatedShortId to the url provided by user....
+
+so basically; user sends a url => generate a shortid and store it in db => give generatedShortId to user such that /url/generatedShortId redirects to generated url..
+
+controllers control the models; and further models controls the views
+
+POST /url => genrates short shortId
+get/url/:shortId => redirects to the link
+
+
+
+1) In statefull=> the user can only generate shortUrl if he's logged in (we know cz. we added restrictToLoggedInUsersOnly middleware on this route)..
+ First user signs up and we add the user details into our schema user...then we redirect to login ....while login we check if user is present in our schema and if yes then we geenrate uuid for this session i.e. sessionId(so whenever the user have this ID; it can generate shorturl)
+ Meanwhile we store the Id and the user who requested it together in our services Map (via .set) 
+
+ everything's fine now cz. the id we generated; the user have it and can use but if browser reloads and that cookie ID vanishes; the user has to login again but if he have that earlier id then we can reconfirm it and he dont have to login; this happend via getUser of map ; which is called inside auth middleware....which checks that if requested user = user in our map...
+ this happens everytime cz. middleware is there in every generation of URl...
+
+2) Stateless=>  
+ 1}sending jwt via cookie (but for limited upto PC browsers only )
+yaha we r perrforming 2 operations(setuser,getuser defined in services) much similar to earlier.....wehre in middleware we are checking if the user is logged in(that's the purpose of middleware) and in user.js controller handleUserlogin we are assisting the login etc.(note:- login krke token generate krne ka kaam handleUserlogin->setUser krta hai and if the request of client is verified i.e. have my token-> ye kaam services ka getuser krta hai).
+in setUser we are generating jwt by jwt.sign (herein jwt gets generated from the user data inputted and secret key);;;;; in getuser verification takes place of the generated token and our key which happens in middleware.
+
+  2} Sending jwt tokens via json response and verifying it with incoming headers (the request headers contain a default header called authorization having first word Bearer and we split the resoponse and verify the jwt)
+       the  
+
+
+
+/login and /signup in staticRouter.js: Serve the login and signup pages (GET requests).
+/user/login and /user/signup in user.js: Handle the form submissions (POST requests).
+You need both!
+One set for rendering the forms (GET),
+One set for processing the data (POST).
+Let me know if you want to see a diagram or code flow for this!
+
+
+
+
+
+
+
+✅ JSON (JavaScript Object Notation):
+	•	It’s just a format — a way to represent data as text.
+	•	It looks like JavaScript objects, but it’s used for storing/transferring data (e.g., between backend and frontend, APIs).
+	•	JSON must be in string format — e.g., what you’d send via HTTP.
+
+✅ Object in JavaScript:
+	•	It’s an actual data structure in memory.
+	•	You can work with it in code directly.
+
+🔄 Relationship:
+	•	A JavaScript object or array can be converted to JSON using JSON.stringify().
+	•	A JSON string can be parsed back into an object/array using JSON.parse().
+
+
+
+
+remain: api fetching and using like qrcode, rolewise access, dynamic page render for diff. user, coarse connection.  how the user and url generation models are linke dwith each other?
+Cool Features to Add:
+Email verification on signup.
+Password reset via email.
+User profile page (showing their URLs, analytics, etc.).
+Admin role for managing users/URLs.
+Analytics dashboard for each user’s URLs.
+OAuth login (Google, GitHub, etc.).
+QR code generation for short URLs.
+websocket,grpc, graphql, webrtc, redis caching
+
+
+webrtc, reddis, grqphql
+creating logs is possible via winston,morgan middlewares

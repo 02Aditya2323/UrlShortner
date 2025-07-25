@@ -1,5 +1,5 @@
 const jwt=require("jsonwebtoken");
-const{setUser}=require("../services/auth")
+const{setUser, getUser}=require("../services/auth")
 const User = require("../models/user");
 const bcrypt=require('bcrypt')    // for hashing and storing the passwords
 
@@ -17,7 +17,7 @@ const handleUserSignup = async (req, res) => {   //creating the user
 }
 
 const handleUserLogin = async (req, res) => {
-    const { email, password } = req.body;
+    const { email, password } = req.body;  //required the email, pass from the request's body
 
     try {
         const user = await User.findOne({ email });
@@ -29,7 +29,7 @@ const handleUserLogin = async (req, res) => {
         const token = setUser(user); 
         res.json({token}); 
 
-        return res.redirect("/"); // actually this is incorrect; we cant send json token for login session and redirection to homepage after sucessful login both at the same time
+    return res.redirect("/"); // actually this is incorrect; we cant send json token for login session and redirection to homepage after sucessful login both at the same time
 
 
     } catch (error) {
@@ -38,4 +38,15 @@ const handleUserLogin = async (req, res) => {
     }
 }
 
-module.exports={handleUserSignup,handleUserLogin};
+const handleuserLogout=async(req,res)=>{
+    return res.json({ message: "Logout successful. Please remove the token on the client." });
+    // logout will be from frontend side=>   localStorage.removeItem('token');
+  // or
+  sessionStorage.removeItem('token');
+  // then redirect to login page
+  window.location = '/login';
+  
+        
+}
+
+module.exports={handleUserSignup,handleUserLogin,handleuserLogout};
